@@ -1,27 +1,35 @@
 #include "constants.h"
 #include "indicator.h"
 
-void setup() {
+// Array to hold the RGB values, initialized to 0
+unsigned char colors[NUM_COLORS] = {0, 0, 0};
+
+// Index variable to iterate through the colors array
+unsigned char i = 0;
+
+void setup() 
+{
   // Initialize RGB LED pins
   RGBLED::initialize();
 }
 
-void loop() {
-  // Set color to red
-  RGBLED::setColor(255, 0, 0);
+void loop() 
+{
+  // Increment the current color component if it is less than 255
+  if (colors[i] < 255) 
+  {
+    colors[i]++;
+  } 
+  // If the current color component reaches 255, reset it to 0 and move to the next component
+  else 
+  {
+    colors[i] = 0;
+    i = (i + 1) % NUM_COLORS; // Move to the next color component if it does not exceed the number of colors, otherwise reset back to zero
+  }
 
-  // Wait for 1 second
-  delay(1000);
+  // Update the RGB LED with the current colors
+  RGBLED::setColor(colors[0], colors[1], colors[2]);
 
-  // Set color to green
-  RGBLED::setColor(0, 255, 0);
-
-  // Wait for 1 second
-  delay(1000);
-
-  // Set color to blue
-  RGBLED::setColor(0, 0, 255);
-
-  // Wait for 1 second
-  delay(1000);
+  // Wait for the specified delay time in milliseconds
+  delay(DELAY_TIME);
 }
